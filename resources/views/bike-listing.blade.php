@@ -36,7 +36,8 @@
         <div class="product-listing-m gray-bg">
           <div class="product-listing-img">
             @if($packages->image)
-            <img src="{{ asset('storage/images/'.$packages->image) }}" class="img-responsive" alt="Image" >
+            <img src="{{ asset('storage/images/' . $packages->image) }}"class="img-responsive"  alt="Image">
+
             @else 
             <span>No image found!</span>
             @endif

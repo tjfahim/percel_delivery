@@ -23,7 +23,6 @@ class ServicePackageController extends Controller
         return view('admin.packagesAdd');
     }
 
-    private $storagePath = 'public/images';
 
     public function store(Request $request)
     {
@@ -36,8 +35,6 @@ class ServicePackageController extends Controller
     
         $fileName = time() . '.' . $request->image->extension();
         $request->image->storeAs('public/images', $fileName);
-    
-       
         $package = new Package;
         $package->name = $request->input('name');
         $package->price = $request->input('price');

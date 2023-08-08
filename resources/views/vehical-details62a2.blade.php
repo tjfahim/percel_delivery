@@ -3,16 +3,16 @@
 
 <!--Listing-Image-Slider-->
 
-
+{{-- 
 <section id="listing_img_slider">
   <div><img src="admin/img/vehicleimages/istockphoto-1048532172-612x612.jpg" class="img-responsive" alt="image" width="900" height="560"></div>
   <div><img src="admin/img/vehicleimages/index.html" class="img-responsive" alt="image" width="900" height="560"></div>
   <div><img src="admin/img/vehicleimages/index.html" class="img-responsive" alt="image" width="900" height="560"></div>
   <div><img src="admin/img/vehicleimages/index.html" class="img-responsive"  alt="image" width="900" height="560"></div>
-  </section>
+  </section> --}}
 <!--/Listing-Image-Slider-->
 
-package
+
 <!--Listing-detail-->
 <section class="listing-detail">
   <div class="container">
@@ -131,30 +131,31 @@ package
           <div class="widget_heading">
             <h5><i class="fa fa-envelope" aria-hidden="true"></i>Add Parcel Now</h5>
           </div>
-          <form method="post">
+          <form method="post" action="{{ route("ultradeliveries.store")}}" >
+            @csrf
+            <div class="form-group">
+              <input type="text" class="form-control" name="from_name" placeholder="From Name" required>
+            </div>
           <div class="form-group">
-              <input type="text" class="form-control" name="fromname" placeholder="From Name" required>
-            </div>
-          <div class="form-group">
-              <input type="text" class="form-control" name="toname" placeholder="To Name" required>
+              <input type="text" class="form-control" name="to_name" placeholder="To Name" required>
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="fromaddress" placeholder="From Address" required>
+              <input type="text" class="form-control" name="from_address" placeholder="From Address" required>
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="fromdate" placeholder="To Address" required>
+              <input type="text" class="form-control" name="to_address" placeholder="To Address" required>
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="fromcontactno" placeholder="From Contact No" maxlength="11" required>
+              <input type="text" class="form-control" name="from_contact_no" placeholder="From Contact No" maxlength="11" required>
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="tocontactno" placeholder="To Contact No" maxlength="11" required>
+              <input type="text" class="form-control" name="to_contact_no" placeholder="To Contact No" maxlength="11" required>
             </div>
            
             <div class="form-group">
               <!-- <textarea class="form-control"  placeholder="How would you like to take delivery?" required>
                -->
-              <select class="form-control" name="delivaryprocess"  required>
+              <select class="form-control" name="delivery_type"  required>
 <option Value = "Select">Select Delivary Type</option>
 
 <option value="Cash On Delivary">Normal</option>
@@ -162,7 +163,7 @@ package
 </select>
 </div>
 <div class="form-group">
-<select class="form-control" name="delivarysystem"  required>
+<select class="form-control" name="payment_category"  required>
 <option Value = "Select">Select Payment Category</option>
 
 <option value="Cash On Delivary">Cash On Delivary</option>
@@ -174,7 +175,7 @@ package
 </select>
 </div>
 <div class="form-group">
-              <input type="text" class="form-control" name="paymentid" placeholder="Enter payment ID/not enter 0" >
+              <input type="text" class="form-control" name="payment_id" placeholder="Enter payment ID/not enter 0" >
             </div>
 <div class="form-group">
               <textarea rows="4" class="form-control" name="message" placeholder="Message"></textarea>
@@ -182,8 +183,11 @@ package
               
               </textarea>
             </div>
-          <a href="#loginform" class="btn btn-xs uppercase" data-toggle="modal" data-dismiss="modal">Login For Delivery</a>
-
+            @if(auth()->check())
+            <button class="btn btn-xs uppercase" type="submit" >Submit </button>
+            @else
+                <a href="#loginform" class="btn btn-xs uppercase">Login to Submit</a>
+            @endif
                         </form>
         </div>
       </aside>
@@ -193,7 +197,7 @@ package
     <div class="space-20"></div>
     <div class="divider"></div>
 
-    <!--Similar-Cars-->
+    {{-- <!--Similar-Cars-->
     <div class="similar_cars">
       <h3>Similar Delivary Package</h3>
       <div class="row">
@@ -202,21 +206,22 @@ package
             <div class="product-listing-img"> <a href="vehical-detailsba60.html?vhid=14"><img src="admin/img/vehicleimages/delivery-man-isolated-yellow-with-thumbs-up-because-something-good-has-happened_1368-70622.jpg" class="img-responsive" alt="image" /> </a>
             </div>
             <div class="product-listing-content">
-              <h5><a href="vehical-detailsba60.html?vhid=14">Majhira, Bogura To Gabtoli, Dhaka , Suvo EnterPrize</a></h5>
-              <p class="list-price">Tk 350</p>
+              <h5><a href="vehical-detailsba60.html?vhid=14">{{ $package->name}}</a></h5>
+              <img src="{{ asset('storage/images/' . $package->image) }}"class="img-responsive"  alt="Image">
+              <p class="list-price">Tk {{ $package->price}}</p>
 
               <ul class="features_list">
 
              <!-- <li><i class="fa fa-user" aria-hidden="true"></i>50 Seat</li>
                 <li><i class="fa fa-calendar" aria-hidden="true"></i>10 Time Sheduling</li> -->
-                <li><i class="fa fa-car" aria-hidden="true"></i>Normal Delivary</li>
+                <li><i class="fa fa-car" aria-hidden="true"></i>{{ $package->delivery_type}} Delivary</li>
               </ul>
             </div>
           </div>
         </div>
          <div class="col-md-3 grid_listing">
           <div class="product-listing-m gray-bg">
-            <div class="product-listing-img"> <a href="vehical-details62a2.html?vhid=15"><img src="admin/img/vehicleimages/istockphoto-1048532172-612x612.jpg" class="img-responsive" alt="image" /> </a>
+            <div class="product-listing-img"> <a href="vehical-details62a2.html?vhid=15"><img src="{{ asset('storage/images/' . $package->image) }}" class="img-responsive" alt="image" /> </a>
             </div>
             <div class="product-listing-content">
               <h5><a href="vehical-details62a2.html?vhid=15">Majhira, Bogura To Gabtoli, Dhaka , Suvo EnterPrize</a></h5>
@@ -234,7 +239,7 @@ package
  
       </div>
     </div>
-    <!--/Similar-Cars-->
+    <!--/Similar-Cars--> --}}
 
   </div>
 </section>
